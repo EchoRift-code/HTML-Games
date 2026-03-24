@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Get That Button!</title>
+        <style>
+            body{
+                background-color: blueviolet;
+                margin: auto;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+            }
+            canvas{
+                display: block;
+                border: 2px solid rgb(6, 226, 101);
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id="mainCanvas" width="800" height="800"></canvas>
+        
+        <script>
+            console.log("Hello browser");
+            const canvas = document.getElementById("mainCanvas");
+            const draw = canvas.getContext("2d");
+
+            let rectX = 375;
+            let rectY = 375;
+            let randX = Math.floor(Math.random() * (750 - 50 + 1)) + 50;
+            let randY = Math.floor(Math.random() * (750 - 50 + 1)) + 50;
+
+            let mouseX = 0;
+            let mouseY = 0;
+
+            let count = 0;
+
+            canvas.addEventListener("mousemove", function(event) {
+                mouseX = event.offsetX;
+                mouseY = event.offsetY;
+            });
+
+           // Track mouse clicks
+            canvas.addEventListener("click", (e)=>{
+                const rect = canvas.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left; // X relative to canvas
+                const mouseY = e.clientY - rect.top; // Y relative to canvas
+                console.log("Mouse clicked at:", mouseX, mouseY);
+
+                // Check if rectangle was clicked
+                if(mouseX >=rectX && mouseX <= rectX + 50 && mouseY >= rectY && mouseY <= rectY + 50){
+                    console.log("Rectangle clicked!");
+                    randX = Math.floor(Math.random() * (750 - 50 + 1)) + 50;
+                    randY = Math.floor(Math.random() * (750 - 50 + 1)) + 50;
+                    rectX = randX;
+                    rectY = randY;
+                    console.log(rectX);
+                    console.log(rectY);
+                }
+            });
+
+            function gameLoop(){
+                // Draws a rectangle that covers the whole canvas
+                draw.fillStyle = "#222"; 
+                draw.fillRect(0,0,canvas.width,canvas.height);
+
+                draw.fillStyle = "white";     // text color
+                draw.font = "20px Arial";     // size + font
+                
+                if (count <= 5){
+                    draw.fillText("Click Me!", rectX-18, rectY-5); // text, x, y
+                    draw.fillStyle = "yellow";
+                    draw.fillRect( rectX, rectY, 50, 50);
+                }else if(count >= 6 && count <= 10){
+                    draw.fillText("Just Click me", rectX-30, rectY-5); // text, x, y
+                    draw.fillStyle = "yellow";
+                    draw.fillRect( rectX, rectY, 50, 50);
+                }else if(count >= 11 && count <= 15){
+                    draw.fillText("Its not that hard", rectX-36, rectY-5); // text, x, y
+                    draw.fillStyle = "yellow";
+                    draw.fillRect( rectX, rectY, 50, 50);
+                }else if(count >= 16 && count <= 20){
+                    draw.fillText("This is getting sad", rectX-50, rectY-5); // text, x, y
+                    draw.fillStyle = "yellow";
+                    draw.fillRect( rectX, rectY, 50, 50);
+                }else if(count >= 21 && count <= 25){
+                    draw.font = "100px Arial";
+                    draw.fillText("Game Over", 200, 400); // text, x, y
+                    draw.fillText("Loser", 300, 600);
+                }
+                
+
+                if (
+                    mouseX >= rectX &&
+                    mouseX <= rectX + 50 &&
+                    mouseY >= rectY &&
+                    mouseY <= rectY + 50
+                ) {
+                    rectX = Math.floor(Math.random() * (750 - 50 + 1)) + 50;
+                    rectY = Math.floor(Math.random() * (750 - 50 + 1)) + 50;
+                    count += 1;
+                }
+
+               requestAnimationFrame(gameLoop); // Calls the next frame, like redrawing it
+            }
+            
+            gameLoop()
+        </script>
+    </body>
+</html>
